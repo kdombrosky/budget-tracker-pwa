@@ -58,7 +58,7 @@ function uploadTransaction() {
     // get all records from store and set to a variable 
     const getAll = transactionObjectStore.getAll(); 
 
-    // more to come... 
+    // Execute after .getAll() is successful 
     getAll.onsuccess = function() { 
         // if there was data in indexedDb's store, let's send it to the api server 
         if (getAll.result.length > 0) { 
@@ -91,6 +91,11 @@ function uploadTransaction() {
               }); 
          } 
     }; 
-  
 } 
+
+
+// listen for app coming back online 
+window.addEventListener('online', uploadTransaction); 
+
+
 
