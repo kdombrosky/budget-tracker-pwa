@@ -1,89 +1,99 @@
-// create variable to hold db connection
-let db;
-// establish a connection to IndexedDB database called 'pizza_hunt' and set it to version 1
-const request = indexedDB.open('budget_tracker', 1);
+// create variable to hold db connection 
+let db; 
 
-// this event will emit if the database version changes (nonexistant to version 1, v1 to v2, etc.)
-request.onupgradeneeded = function(event) {
-    // save a reference to the database 
-    const db = event.target.result;
-    // create an object store (table) called `new_pizza`, set it to have an auto incrementing primary key of sorts 
-    db.createObjectStore('new_budget', { autoIncrement: true });
-};
+// establish a connection to IndexedDB database called 'budget_tracker' and set it to version 1 
+// change version number to 2 to trigger onupgradeneeded event
+const request = indexedDB.open('budget_tracker', 1); 
 
-// upon a successful 
-request.onsuccess = function(event) {
-    // when db is successfully created with its object store (from onupgradedneeded event above) 
-    //or simply established a connection, save reference to db in global variable
-    db = event.target.result;
+// this event will emit if the database version changes (nonexistant to version 1, v1 to v2, etc.) 
+request.onupgradeneeded = function(event) { 
+    // save a reference to the database  
+    const db = event.target.result; 
+    // create an object store (table) called `new_transaction`, set it to have an auto incrementing primary key of sorts  
+    db.createObjectStore('new_transaction', { autoIncrement: true }); 
+}; 
 
-    // check if app is online, if yes run uploadPizza() function to send all local db data to api
-    if (navigator.onLine) {
-      // we haven't created this yet, but we will soon, so let's comment it out for now
-        //uploadPizza();
-    }
-};
+// upon a successful  
+request.onsuccess = function(event) { 
+    // when db is successfully created with its object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable 
+    db = event.target.result; 
 
-request.onerror = function(event) {
-    // log error here
-    console.log(event.target.errorCode);
-};
+    // check if app is online, if yes run uploadTransaction() function to send all local db data to api 
+    if (navigator.onLine) { 
+      uploadTransaction(); 
+    } 
+}; 
 
 
-// This function will be executed if we attempt to submit a new pizza and there's no internet connection
-// function saveRecord(record) {
-//     // open a new transaction with the database with read and write permissions 
-//     const transaction = db.transaction(['new_pizza'], 'readwrite');
+request.onerror = function(event) { 
+    // log error here 
+    console.log(event.target.errorCode); 
+}; 
 
-//     // access the object store for `new_pizza`
-//     const pizzaObjectStore = transaction.objectStore('new_pizza');
 
-//     // add record to your store with add method
-//     pizzaObjectStore.add(record);
-// }
+// This function will be executed if we attempt to submit a new transaction and there's no internet connection 
+// was already added to ./public/js/index.js
+function saveRecord(record) { 
+    // open a new transaction with the database with read and write permissions  
+    const transaction = db.transaction(['new_transaction'], 'readwrite'); 
 
-// function uploadPizza() {
-//     // open a transaction on your db
-//     const transaction = db.transaction(['new_pizza'], 'readwrite');
+    // access the object store for `new_transaction` 
+    // transaction.objectStore helps indexedDB maintain accurate reading of data
+    const transactionObjectStore = transaction.objectStore('new_transaction'); 
 
-//     // access your object store
-//     const pizzaObjectStore = transaction.objectStore('new_pizza');
+    // add record to your store with add method 
+    transactionObjectStore.add(record); 
+} 
 
-//     // get all records from store and set to a variable
-//     const getAll = pizzaObjectStore.getAll();
+// Upload transaction after connection has been restored
+function uploadTransaction() { 
+    // open a transaction on your db 
+    const transaction = db.transaction(['new_transaction'], 'readwrite'); 
 
-//     // upon a successful .getAll() execution, run this function
-//     getAll.onsuccess = function() {
-//         // if there was data in indexedDb's store, let's send it to the api server
-//         if (getAll.result.length > 0) {
-//             fetch('/api/pizzas', {
-//                 method: 'POST',
-//                 body: JSON.stringify(getAll.result),
-//                 headers: {
-//                 Accept: 'application/json, text/plain, */*',
-//                 'Content-Type': 'application/json'
-//                 }
-//             })
-//             .then(response => response.json())
-//             .then(serverResponse => {
-//             if (serverResponse.message) {
-//                 throw new Error(serverResponse);
-//             }
-//             // open one more transaction
-//             const transaction = db.transaction(['new_pizza'], 'readwrite');
-//             // access the new_pizza object store
-//             const pizzaObjectStore = transaction.objectStore('new_pizza');
-//             // clear all items in your store
-//             pizzaObjectStore.clear();
+    // access your object store 
+    const transactionObjectStore = transaction.objectStore('new_transaction'); 
 
-//             alert('All saved pizza has been submitted!');
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//             });
-//         }
-//     };
-// }
+    // get all records from store and set to a variable 
+    const getAll = transactionObjectStore.getAll(); 
 
-// // listen for app coming back online
-// window.addEventListener('online', uploadPizza);
+    // Execute after .getAll() is successful 
+    getAll.onsuccess = function() { 
+        // if there was data in indexedDb's store, let's send it to the api server 
+        if (getAll.result.length > 0) { 
+            fetch('/api/transaction', { 
+                method: 'POST', 
+                body: JSON.stringify(getAll.result), 
+                headers: { 
+                    Accept: 'application/json, text/plain, */*', 
+                    'Content-Type': 'application/json' 
+                } 
+            }) 
+            .then(response => response.json()) 
+            .then(serverResponse => { 
+                if (serverResponse.message) { 
+                    throw new Error(serverResponse); 
+                } 
+
+                // open one more transaction 
+                const transaction = db.transaction(['new_transaction'], 'readwrite'); 
+
+                // access the new_transaction object store 
+                const transactionObjectStore = transaction.objectStore('new_transaction'); 
+
+                // clear all items in your store 
+                transactionObjectStore.clear(); 
+                alert('All saved transactions have been submitted!'); 
+            }) 
+            .catch(err => { 
+                console.log(err); 
+            }); 
+        } 
+    }; 
+} 
+
+
+// listen for app coming back online 
+window.addEventListener('online', uploadTransaction); 
+
+
+
