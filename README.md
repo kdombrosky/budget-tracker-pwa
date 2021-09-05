@@ -9,6 +9,8 @@ Link to site: https://hidden-springs-87667.herokuapp.com/
 * [Usage](#usage)
 * [Contributing](#contributing)
 
+![Budget-tracker preview](https://github.com/kdombrosky/budget-tracker-pwa/blob/main/public/assets/preview.png?raw=true)
+
 ## Description 
 This Budget Tracker App allows users to easily store their purchases and earnings, while displaying an intuitive graph of their total over time. This app includes design for use in poor connectivity areas. Once the app has been loaded online for the first time, the user can continue to use it offline/in poor connectivity for themselves. This app may also be downloaded as a PWA. 
 
