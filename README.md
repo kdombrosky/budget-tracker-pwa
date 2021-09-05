@@ -5,7 +5,6 @@ Link to site: https://hidden-springs-87667.herokuapp.com/
 
 ## Table of Contents 
 * [Description](#description)
-* [Installation](#installation)
 * [Usage](#usage)
 * [Contributing](#contributing)
 
