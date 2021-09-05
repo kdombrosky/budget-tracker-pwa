@@ -16,9 +16,14 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(MONGODB_URI, {
+// mongoose.connect(MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useFindAndModify: false
+// });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pizza-hunt', {
+  useFindAndModify: false,
   useNewUrlParser: true,
-  useFindAndModify: false
+  useUnifiedTopology: true
 });
 
 // routes
