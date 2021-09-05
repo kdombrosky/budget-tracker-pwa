@@ -1,6 +1,6 @@
 # Budget Tracker Starter Code
 
-Link to site: 
+Link to site: https://hidden-springs-87667.herokuapp.com/ 
 <br/>
 
 ## Table of Contents 
@@ -10,11 +10,13 @@ Link to site:
 * [Contributing](#contributing)
 
 ## Description 
-This Budget Tracker App allows users to easily store their purchases and earnings, while displaying an intuitive graph of their total. This app includes design for use in poor connectivity areas. Once the app has been loaded online for the first time, the user can continue to use it offline or in poor connectivity areas for themselves. This app may also be downloaded as a PWA. 
+This Budget Tracker App allows users to easily store their purchases and earnings, while displaying an intuitive graph of their total over time. This app includes design for use in poor connectivity areas. Once the app has been loaded online for the first time, the user can continue to use it offline/in poor connectivity for themselves. This app may also be downloaded as a PWA. 
 
-## Installation
 
 ## Usage
+1. Navigate to the site [here](https://hidden-springs-87667.herokuapp.com/) for the first time to download contents 
+2. Add and subtract transactions in the app! 
+3. Continue to use the app online or offline. 
 
 ## Contributing
 This project was made by `Kayla Dombrosky 9/2021` <br/>
